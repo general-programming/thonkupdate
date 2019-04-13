@@ -74,7 +74,7 @@ proc handler(req: Request) {.async gcsafe.} =
 
     if event == "push":
         var push = to(body, PushBody)
-        var pc = startProcess("git", workingDir = "/srv/thonkbot", args = ["pull"])
+        var pc = startProcess("/usr/bin/env", workingDir = "/srv/thonkbot", args = ["git", "pull"])
 
         await waitForProcess(pc)
 
