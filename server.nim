@@ -12,9 +12,10 @@ type
     Author = object
         name: string
         email: string
+        username: string
         
     Commit = object
-        sha: string
+        id: string
         message: string
         author: Author
 
