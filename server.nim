@@ -74,7 +74,7 @@ proc handler(req: Request) {.async gcsafe.} =
 
     if event == "push":
         var push = to(body, PushBody)
-        var pc = startProcess("/usr/bin/env", workingDir = "/srv/thonkbot", args = ["git", "pull"])
+        var pc = startProcess("/usr/bin/env", workingDir = cfg.getSectionValue("bot", "update_dir"), args = ["git", "pull"])
 
         await waitForProcess(pc)
 
@@ -104,4 +104,11 @@ proc handler(req: Request) {.async gcsafe.} =
 
     await req.respond(Http200, "OK")
 
-waitFor server.serve(Port(5010), handler)
+proc errorHandler(req: Request) {.async.} =
+    var fut = handler(req)
+    yield fut
+
+    if fut.failed:
+        await req.respond(Http500, fut.readError.msg)
+    
+waitFor server.serve(Port(5010), errorHandler)
