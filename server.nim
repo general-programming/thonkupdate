@@ -53,7 +53,7 @@ type
         after: string
         commits: seq[Commit]
 
-let webhookUrl = secrets.getSectionValue("secrets", "discord_webhook")
+let webhookUrl = secrets.getSectionValue("discord", "webhook")
 
 proc ensure[T](fut: Future[T]): Future[T] =
     return fut
